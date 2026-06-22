@@ -281,8 +281,17 @@ export default function HomePage() {
       {/* ====== STICKY HERO ====== */}
       <div className="hero-sticky-wrapper">
         <section className="hero-section" ref={heroRef}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&h=900&fit=crop"
+            alt="Sleek dark car close-up showing premium paint finish"
+            className="absolute inset-0 w-full h-full object-cover"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-[#050505]/60 to-[#050505]/90" />
+
           <div className="hero-glow-orb" />
-          <div className="hero-content hero-scroll-fade">
+          <div className="hero-content hero-scroll-fade relative z-10">
             <h1 className="hero-title chrome-text-lg">
               Your car.
               <br />
