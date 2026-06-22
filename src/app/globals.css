@@ -317,14 +317,7 @@ body {
   }
 }
 
-/* Hero sticky fade on scroll() */
-@supports (animation-timeline: scroll()) {
-  .hero-scroll-fade {
-    animation: hero-fade ease-out both;
-    animation-timeline: scroll(nearest block);
-    animation-range: 0vh 60vh;
-  }
-}
+/* Hero scroll fade handled by JS scroll listener */
 
 /* ============================================================
    IO FALLBACKS (for browsers without scroll-driven)
@@ -378,19 +371,24 @@ body {
    ============================================================ */
 .hero-section {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.hero-sticky-wrapper {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  z-index: 1;
+.hero-section .hero-content {
+  transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
 }
+
+.hero-section.scrolled-past .hero-content {
+  opacity: 0;
+  transform: scale(0.97);
+  filter: blur(6px);
+}
+
+/* hero-sticky-wrapper removed — hero is now a normal section */
 
 .hero-content {
   text-align: center;

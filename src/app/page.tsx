@@ -171,7 +171,7 @@ const packages = [
 export default function HomePage() {
   const [navScrolled, setNavScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
 
   /* --- Intersection Observer fallback --- */
   useEffect(() => {
@@ -212,22 +212,17 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* --- Hero parallax fade (manual for broad support) --- */
+  /* --- Hero scroll fade — toggles class for CSS transition --- */
   useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const supportsScrollTimeline =
-      CSS.supports && CSS.supports("animation-timeline", "scroll()");
-    if (supportsScrollTimeline) return; // let CSS handle it
+    const heroSection = heroRef.current;
+    if (!heroSection) return;
 
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      const progress = Math.min(scrollY / (vh * 0.6), 1);
-      hero.style.opacity = `${1 - progress}`;
-      hero.style.filter = `blur(${progress * 12}px)`;
-      hero.style.transform = `scale(${1 - progress * 0.05})`;
+      if (window.scrollY > window.innerHeight * 0.3) {
+        heroSection.classList.add("scrolled-past");
+      } else {
+        heroSection.classList.remove("scrolled-past");
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -278,35 +273,33 @@ export default function HomePage() {
         </ul>
       </nav>
 
-      {/* ====== STICKY HERO ====== */}
-      <div className="hero-sticky-wrapper">
-        <section className="hero-section" ref={heroRef}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&h=900&fit=crop"
-            alt="Sleek dark car close-up showing premium paint finish"
-            className="absolute inset-0 w-full h-full object-cover"
-            fetchPriority="high"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-[#050505]/60 to-[#050505]/90" />
+      {/* ====== HERO ====== */}
+      <section className="hero-section" ref={heroRef}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&h=900&fit=crop"
+          alt="Sleek dark car close-up showing premium paint finish"
+          className="absolute inset-0 w-full h-full object-cover"
+          fetchPriority="high"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-[#050505]/60 to-[#050505]/90" />
 
-          <div className="hero-glow-orb" />
-          <div className="hero-content hero-scroll-fade relative z-10">
-            <h1 className="hero-title chrome-text-lg">
-              Your car.
-              <br />
-              Our obsession.
-            </h1>
-            <p className="hero-subtitle">
-              Premium detailing, ceramic coating &amp; paint protection in
-              Tucson, AZ.
-            </p>
-            <a href="#booking" className="cta-btn">
-              Book a Detail
-            </a>
-          </div>
-        </section>
-      </div>
+        <div className="hero-glow-orb" />
+        <div className="hero-content relative z-10">
+          <h1 className="hero-title chrome-text-lg">
+            Your car.
+            <br />
+            Our obsession.
+          </h1>
+          <p className="hero-subtitle">
+            Premium detailing, ceramic coating &amp; paint protection in
+            Tucson, AZ.
+          </p>
+          <a href="#booking" className="cta-btn">
+            Book a Detail
+          </a>
+        </div>
+      </section>
 
       {/* ====== SERVICES ====== */}
       <section id="services" className="flow-bg" style={{ position: "relative", zIndex: 2 }}>
